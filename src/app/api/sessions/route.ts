@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { addSession, getNextSessionNumber } from "@/lib/sessions";
 
 export async function POST(request: Request) {
@@ -16,6 +17,10 @@ export async function POST(request: Request) {
     learnings: body.learnings ?? "",
     tools: body.tools ?? [],
   });
+
+  revalidatePath("/");
+  revalidatePath("/sessions");
+  revalidatePath(`/sessions/${session.slug}`);
 
   return Response.json({ success: true, session }, { status: 201 });
 }
