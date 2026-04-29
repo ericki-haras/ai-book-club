@@ -1,0 +1,45 @@
+[
+  {
+    "id": "1",
+    "slug": "session-01",
+    "sessionNumber": 1,
+    "date": "2025-04-22",
+    "title": "Kickoff — AI Tools Landscape",
+    "recordingUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "recordingFileId": "",
+    "presenters": [
+      "Ericki Gutierrez"
+    ],
+    "topics": [
+      "Overview of the AI design tools ecosystem",
+      "Midjourney v6 image generation techniques",
+      "Adobe Firefly vs. Generative Fill comparison"
+    ],
+    "learnings": "The group aligned on a shared vocabulary for discussing generative AI tools. Key insight: Firefly's strength is in non-destructive, context-aware edits within existing workflows, while Midjourney excels at creative exploration from scratch. Both serve different phases of the design process.",
+    "tools": [
+      "Midjourney",
+      "Adobe Firefly",
+      "Runway ML"
+    ]
+  },
+  {
+    "id": "1777487292735",
+    "slug": "session-02",
+    "sessionNumber": 2,
+    "date": "2026-04-29",
+    "title": "Test 2",
+    "recordingFileId": "",
+    "presenters": [],
+    "topics": [
+      "Ericki: Storybook; Claude design",
+      "Carlo: Claude design prototyping",
+      "Vagner: Claude design prototyping"
+    ],
+    "learnings": "Lorem ipsum dolor sit amet",
+    "tools": [
+      "Claude Design",
+      "Storybook",
+      "Claude Code."
+    ]
+  }
+]

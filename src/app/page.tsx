@@ -1,65 +1,118 @@
-import Image from "next/image";
+import Link from "next/link";
+import { getSessions } from "@/lib/sessions";
+import { SessionCard } from "@/components/session-card";
+import { buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 
-export default function Home() {
+function formatDate(dateStr: string) {
+  return new Date(dateStr + "T12:00:00").toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+export default async function HomePage() {
+  const sessions = await getSessions();
+  const latest = sessions[0];
+  const rest = sessions.slice(1, 4);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="max-w-5xl mx-auto px-6 py-16 space-y-20">
+      {/* Hero */}
+      <section className="space-y-6 max-w-2xl">
+        <div className="space-y-1">
+          <p
+            className="text-xs font-mono tracking-[0.25em] uppercase"
+            style={{ color: "var(--green)" }}
+          >
+            Porto Alegre
           </p>
+          <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight leading-none">
+            AI Book Club
+          </h1>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <p className="text-lg text-muted-foreground leading-relaxed">
+          Every week, our team gathers to share discoveries about AI design
+          tools — new techniques, experiments, and insights from the frontier of
+          generative design.
+        </p>
+      </section>
+
+
+      {/* Latest session */}
+      {latest && (
+        <section className="space-y-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-mono tracking-widest uppercase" style={{ color: "var(--green)" }}>
+              Latest Session
+            </h2>
+            <Link href="/sessions" className={buttonVariants()}>
+              View all sessions
+            </Link>
+          </div>
+
+          <Link
+            href={`/sessions/${latest.slug}`}
+            className="group block space-y-5 p-6 rounded-lg transition-colors"
+            style={{ border: "1px solid color-mix(in oklch, var(--green) 40%, transparent)" }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+            <div className="flex items-start justify-between gap-4">
+              <h3 className="text-2xl font-semibold group-hover:underline underline-offset-4">
+                {latest.title}
+              </h3>
+              <span className="text-sm text-muted-foreground whitespace-nowrap shrink-0 pt-1">
+                {formatDate(latest.date)}
+              </span>
+            </div>
+
+            {latest.topics.length > 0 && (
+              <ul className="space-y-1.5">
+                {latest.topics.map((topic) => (
+                  <li
+                    key={topic}
+                    className="text-sm text-muted-foreground flex gap-2"
+                  >
+                    <span style={{ color: "var(--purple)" }}>—</span>
+                    <span>{topic}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div className="flex flex-wrap gap-1.5">
+              {latest.tools.map((tool) => (
+                <Badge
+                  key={tool}
+                  variant="secondary"
+                  className="text-xs"
+                  style={{
+                    backgroundColor: "color-mix(in oklch, var(--green) 15%, transparent)",
+                    color: "color-mix(in oklch, var(--green) 60%, black)",
+                  }}
+                >
+                  {tool}
+                </Badge>
+              ))}
+            </div>
+          </Link>
+        </section>
+      )}
+
+      {/* Previous sessions */}
+      {rest.length > 0 && (
+        <section className="space-y-6">
+          <h2 className="text-sm font-mono tracking-widest uppercase" style={{ color: "var(--green)" }}>
+            Previous Sessions
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {rest.map((session) => (
+              <SessionCard key={session.id} session={session} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
