@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Session {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  sessionNumber   Int      @unique
+  date            String
+  title           String
+  recordingUrl    String?
+  recordingFileId String   @default("")
+  topics          String[]
+  learnings       String   @default("")
+  tools           String[]
+  createdAt       DateTime @default(now())
+}
