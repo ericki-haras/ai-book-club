@@ -3,6 +3,9 @@ import Link from "next/link";
 import { getSessionBySlug, getSessions } from "@/lib/sessions";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { RecordingPlaceholder } from "@/components/recording-placeholder";
+import { DeleteSessionButton } from "@/components/delete-session-button";
+import { EditSessionButton } from "@/components/edit-session-button";
 
 export async function generateStaticParams() {
   const sessions = await getSessions();
@@ -76,25 +79,7 @@ export default async function SessionPage(props: PageProps<"/sessions/[slug]">) 
               title={`Recording of ${session.title}`}
             />
           ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="opacity-40"
-              >
-                <path d="m15 10 4.553-2.069A1 1 0 0 1 21 8.82v6.36a1 1 0 0 1-1.447.89L15 14" />
-                <rect x="2" y="6" width="13" height="12" rx="2" />
-                <line x1="2" y1="2" x2="22" y2="22" className="opacity-0" />
-              </svg>
-              <span className="text-sm font-medium opacity-50">No recording added</span>
-            </div>
+            <RecordingPlaceholder />
           )}
         </div>
       </section>
@@ -164,6 +149,10 @@ export default async function SessionPage(props: PageProps<"/sessions/[slug]">) 
           </div>
         </section>
       )}
+      <div className="flex items-center gap-6">
+        <EditSessionButton slug={session.slug} />
+        <DeleteSessionButton slug={session.slug} />
+      </div>
     </div>
   );
 }

@@ -17,7 +17,7 @@ export type Session = {
 
 export async function getSessions(): Promise<Session[]> {
   return prisma.session.findMany({
-    orderBy: { sessionNumber: "desc" },
+    orderBy: { date: "desc" },
   });
 }
 
