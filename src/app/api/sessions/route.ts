@@ -2,6 +2,11 @@ import { revalidatePath } from "next/cache";
 import { addSession, getNextSessionNumber } from "@/lib/sessions";
 
 export async function POST(request: Request) {
+  const authHeader = request.headers.get("authorization");
+  if (!process.env.ADMIN_KEY || authHeader !== `Bearer ${process.env.ADMIN_KEY}`) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body = await request.json();
 
   const sessionNumber = await getNextSessionNumber();
